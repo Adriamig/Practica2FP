@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Adrián Migueles D'Ambrosio
+// Simeón Konstantinov Petrov
+
+
+using System;
 
 namespace Practica2
 {
-    class Program
+    class MainClass
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            //Probando esto
+
         }
     }
 }
