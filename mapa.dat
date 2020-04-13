@@ -1,0 +1,89 @@
+// room <nombre> "<desc>"
+
+room rest_stop "You are at a North Cascades Hwy rest-stop. It is a crisp fall morning. North of you, a little dog barks and dashes down a forest trail. To the South, your warm car and the open road."
+
+room car "You head down the road, wondering what could have been. An 18 wheeler crushes you. Look both ways before entering traffic."
+
+room forest_trail "The trail opens to snow capped peaks and a lush valley. To the North, a wild river runs \Other trails lead to the East and West. Return to the parking lot to the South."
+
+room river_bank "The clear, cold Skagit river rushes at your feet. Attempt to ford the river by heading North  Head upstream to the East Move toward the Puget Sound by heading downstream, to the West. Go back toward the start by moving South"
+
+room trail_east "A massive peak looms above. Climb the peak by continuing East. Head North along Kendal Catwalk. To the South is the difficult Section K of the Pacific Crest Trail. The sweeping valley vistas lie to the West"
+
+room trail_west "The trail forks at a granite outcropping. A short climb West looks like the entrance to a cave. The trail continues both North and South. Head back to the valley views to the East"
+
+room kendal_catwalk "A narrow walkway juts out from the shear cliff, to fall hear is certain death. An avalanche has blocked your path. You must return to the South"
+
+room section_k "This difficult trail seems to go on forever. Continue into the unknown up another steep climb to the South. Give up and return to easier by heading North"
+
+room mountain_east "It's no easy feat to top one of these giants. Enjoy the view! Really only one way down from here. Head West"
+
+room clearing "An opening in the forest reveals a heard of elk grazing. The trail seems to disappear here. Better stick to the trail and turn back South"
+
+room dense_forest "The forest is so thick here it's dark. I becomes too dense to cary on. Looks like turning North is the only option"
+
+room cave "Hard to say how far back this cave goes. It's pretty dark. To climb back down, head to the East."
+
+room raging_river "This is colder and deeper than it looked. Faster too. Not a good idea. You're dead."
+
+room shallow_crossing "It's much colder than you thought. You loose 10 health. Head East to reach a bridge. Go West to return to the river bank."
+
+room bridge_crossing "Wait, did I just cross a river to find a bridge?! Oh! There's the little dog from the rest-stop! Walk North to approach the doggo. Head back across the bridge to the South."
+
+room river_delta "The sun glistens off of the wetlands while songbirds fill the air with sound. Head back to the East, unless you have a boat."
+
+room stevens_pass "You made it to Steven's Pass! Hope you brought your board! Head back North when you've shredded your gnar, brah"
+
+room doggo "Finally, the dog that led you into the forest is right here! South is the only way to go."
+
+
+// conections
+// conn <ori> <dir> <dest>
+
+conn rest_stop s car
+conn rest_stop n forest_trail
+
+conn forest_trail n river_bank 
+conn forest_trail e trail_east 
+conn forest_trail w trail_west 
+
+conn trail_east n kendal_catwalk 
+conn trail_east e mountain_east 
+conn trail_east s section_k 
+
+conn trail_west n clearing 
+conn trail_west w cave 
+conn trail_west s dense_forest 
+
+conn section_k s stevens_pass 
+
+conn river_bank n raging_river 
+conn river_bank e shallow_crossing 
+conn river_bank w river_delta 
+
+conn shallow_crossing e bridge_crossing 
+
+conn doggo s bridge_crossing 
+
+
+
+// item <nombre> <weight> <hp> <place> <"descr">
+item flashlight 5 0 rest_stop "A handy tool to light your way." 
+
+item black_key 1 0 dense_forest "A black key. Must go to something." 
+
+item red_key 1 0 stevens_pass "A small, red key. Must go to something." 
+
+item dog_treats 2 0 river_delta "These will make any doggo your friendo." 
+
+item pebbles 2 3 clearing "Small round stones."
+
+item berry1 2 4 trail_west "Purple berries bursting with flavor."
+
+item berry2 2 5 kendal_catwalk "Blue berries bursting with flavor."
+
+item berry3 1 3 river_delta "Black berries bursting with flavor."
+
+
+entry car
+exit doggo
