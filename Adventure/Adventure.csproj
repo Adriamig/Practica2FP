@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{68354318-B40F-4982-B5F9-0CE237FF3068}</ProjectGuid>
+    <ProjectGuid>{E553F66C-15B9-483E-A912-C92120147F02}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Listas</RootNamespace>
-    <AssemblyName>Listas</AssemblyName>
+    <RootNamespace>Adventure</RootNamespace>
+    <AssemblyName>Adventure</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
