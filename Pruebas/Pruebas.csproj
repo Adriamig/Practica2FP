@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E553F66C-15B9-483E-A912-C92120147F02}</ProjectGuid>
+    <ProjectGuid>{07542E59-3A80-497F-B211-9ABEF4147B03}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Adventure</RootNamespace>
-    <AssemblyName>Adventure</AssemblyName>
+    <RootNamespace>Pruebas</RootNamespace>
+    <AssemblyName>Pruebas</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,8 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Listas.cs" />
-    <Compile Include="Adventure.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,6 @@
+C:\Users\Adri\Desktop\Practica2\Pruebas\bin\Debug\Pruebas.exe.config
+C:\Users\Adri\Desktop\Practica2\Pruebas\bin\Debug\Pruebas.exe
+C:\Users\Adri\Desktop\Practica2\Pruebas\bin\Debug\Pruebas.pdb
+C:\Users\Adri\Desktop\Practica2\Pruebas\obj\Debug\Pruebas.csprojAssemblyReference.cache
+C:\Users\Adri\Desktop\Practica2\Pruebas\obj\Debug\Pruebas.exe
+C:\Users\Adri\Desktop\Practica2\Pruebas\obj\Debug\Pruebas.pdb

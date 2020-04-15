@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Adventure
+namespace Listas
 {
-    public enum Direction { North, South, East, West };
-	class Lista
+	// listas enlazadas de ENTEROS (fácilmente adaptable a cualquier otro tipo)
+	class ListaEnlazada
 	{
-
 		// clase privada para los nodos
 		private class Nodo
 		{
@@ -19,11 +14,10 @@ namespace Adventure
 
 		Nodo pri;  // referencia al primer nodo de la lista
 
-		public Lista()
+		public ListaEnlazada()
 		{  // constructora de la clase
 			pri = null;   //  ||
 		}
-
 
 		// añadir nodo al final de la lista
 		public void insertaFinal(int e)
@@ -51,8 +45,6 @@ namespace Adventure
 			}
 		}
 
-
-
 		// buscar un elto
 		public bool buscaDato(int e)
 		{
@@ -75,7 +67,6 @@ namespace Adventure
 			return aux;
 		}
 
-
 		// Ves lista, para depurar. 
 		// Se podría sobrecargar el operador toString
 		public void ver()
@@ -91,28 +82,4 @@ namespace Adventure
 			Console.WriteLine();
 		}
 	}
-	class Map
-    {
-        // items
-        public struct Item
-        {
-            public string name, description;
-            public int hp; // health points
-            public int weight; // peso del item
-        }
-        // lugares del mapa
-        public struct Room
-        {
-            public string name, description;
-            public bool exit; // es salida?
-            public int[] connections; // vector de 4 componentes
-                                      // con el lugar al norte, sur, este y oeste
-                                      // -1 si no hay conexion
-            public Lista itemsInRoom; // indices al vector de items n los items del lugar
-        }
-        Room[] rooms; // vector de lugares del mapa
-        Item[] items; // vector de items del juego
-        int nRooms, nItems; // numero de lugares y numero de items
-        int entryRoom; // numero de la habitacion de entrada (leida del mapa)
-    }
 }
