@@ -8,30 +8,28 @@ namespace Listas
 		// clase privada para los nodos
 		private class Nodo
 		{
-			public int dato;   // información del nodo (podría ser de cualquier tipo)
-			public Nodo sig;   // referencia al siguiente
+			public string itemName;
+			public Nodo sig;
 		}
 
-		Nodo pri;  // referencia al primer nodo de la lista
+		Nodo pri;
 
 		public ListaEnlazada()
-		{  // constructora de la clase
-			pri = null;   //  ||
+		{
+			pri = null;
 		}
 
-		// añadir nodo al final de la lista
-		public void insertaFinal(int e)
+		public void insertaFinal(string name)
 		{
-			// distinguimos dos casos
-			// lista vacia
+
 			if (pri == null)
 			{
 				pri = new Nodo(); // creamos nodo en pri
-				pri.dato = e;
+				pri.itemName = name;
 				pri.sig = null;
 			}
 			else
-			{ // lista no vacia
+			{ 
 				Nodo aux = pri;   // recorremos la lista hasta el ultimo nodo
 				while (aux.sig != null)
 				{
@@ -40,25 +38,25 @@ namespace Listas
 				// aux apunta al último nodo
 				aux.sig = new Nodo(); // creamos el nuevo a continuación
 				aux = aux.sig;         // avanzamos aux al nuevo nodo
-				aux.dato = e;          // ponemos info 
+				pri.itemName = name;
 				aux.sig = null;        // siguiente a null 
 			}
 		}
 
 		// buscar un elto
-		public bool buscaDato(int e)
+		public bool buscaDato(string name)
 		{
-			Nodo aux = buscaNodo(e);
+			Nodo aux = buscaNodo(name);
 			return (aux != null);
 		}
 
 		// auxiliar privada para buscar un nodo con un elto
 		// devuelve referencia al nodo donde está el elto
 		// devuelve null si no está ese elto
-		private Nodo buscaNodo(int e)
+		private Nodo buscaNodo(string name)
 		{
 			Nodo aux = pri; // referencia al primero
-			while (aux != null && aux.dato != e)
+			while (aux != null && aux.itemName == name)
 			{  // búsqueda de nodo con elto e
 				aux = aux.sig;
 			}
@@ -67,19 +65,25 @@ namespace Listas
 			return aux;
 		}
 
-		// Ves lista, para depurar. 
-		// Se podría sobrecargar el operador toString
-		public void ver()
+		public void InfoItemsInRoom(out string[] itemName, out int itemsNum)
 		{
-			Console.Write("\nLista: ");
-			Nodo aux = pri;
+			itemsNum = 0;
+			Nodo aux = pri; // referencia al primero
 			while (aux != null)
-			{
-				Console.Write(aux.dato + " ");
+			{  // búsqueda de nodo con elto e
+				itemsNum++;
 				aux = aux.sig;
 			}
-			Console.WriteLine();
-			Console.WriteLine();
+
+			aux = pri;
+
+			itemName = new string[itemsNum];
+
+			while (aux != null)
+			{  // búsqueda de nodo con elto e
+				itemName[itemsNum] = aux.itemName;
+				aux = aux.sig;
+			}
 		}
 	}
 }

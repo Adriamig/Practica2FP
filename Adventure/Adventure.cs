@@ -37,6 +37,8 @@ namespace Adventure
                 rooms[i].itemsInRoom = new ListaEnlazada();
             }
             items = new Item[numItems];
+            nRooms = 0;
+            nItems = 0;
 		}
 
         public void ReadMap(string file)
@@ -47,12 +49,122 @@ namespace Adventure
 
             while (!mapa.EndOfStream)
             {
-                string s = mapa.ReadLine();
+                string linea = mapa.ReadLine();
+                string[] palabra = linea.Split(Convert.ToChar(" "));
+                switch (palabra[0])
+                {
+                    case "room":
+                        CreateRoom(palabra[1], ReadDescription(linea));
+                        break;
+                    case "item":
+                        CreateItme(palabra[1], int.Parse(palabra[2]), int.Parse(palabra[3]), ReadDescription(linea));
+                        break;
+                    case "conn":
+                        break;
+                    case "entry":
+                        entryRoom = FindRoomByName(palabra[1]);
+                        break;
+                    case "exit":
+                        int exit = 0;
+                        while (exit < rooms.Length)
+                        {
+                            if (rooms[exit].name == palabra[1]) rooms[exit].exit = true;
+                            else rooms[exit].exit = false;
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
 
             mapa.Close();
 
         }
 
+        private void CreateItme(string item, int peso, int curar, string descripcion)
+        {
+            items[nItems].name = item;
+            items[nItems].description = descripcion;
+            items[nItems].weight = peso;
+            items[nItems].hp = curar;
+            nItems++;
+        }
+
+        private void CreateRoom(string sala, string descripcion)
+        {
+            rooms[nRooms].name = sala;
+            rooms[nRooms].description = descripcion;
+            nRooms++;
+        }
+
+        private string ReadDescription(string linea)
+        {
+            string[] descripcion = linea.Split(Convert.ToChar("\""));
+            return descripcion[1];
+        }
+        
+        private int FindItemByName(string itemName)
+        {
+            int item = 0;
+            bool parar = false;
+            while(item < items.Length && !parar)
+            {
+                if (items[item].name == itemName) parar = true;
+                else item++;
+            }
+            if (!parar) item = -1;
+            return item;
+        }
+
+        private int FindRoomByName(string roomName)
+        {
+            int room = 0;
+            bool parar = false;
+            while (room < rooms.Length && !parar)
+            {
+                if (rooms[room].name == roomName) parar = true;
+                else room++;
+            }
+            if (!parar) room = -1;
+            return room;
+        }
+
+        public int GetItemWeight(int itemNumber)
+        {
+            return items[itemNumber].weight;
+        }
+
+        public int GetItemHP(int itemNumber)
+        {
+            return items[itemNumber].hp;
+        }
+
+        public string PrintItemInfo(int itemNumber)
+        {
+            return items[itemNumber].description;
+        }
+
+        public string GetRoomInfo(int roomNumber)
+        {
+            return rooms[roomNumber].description;
+        }
+
+        public string GetInfoItemsInRoom(int roomNumber)
+        {
+            string mensaje;
+            int itemNum;
+            string[] itemName;
+            rooms[roomNumber].itemsInRoom.InfoItemsInRoom(out itemName, out itemNum);
+            if (itemNum == 0) mensaje = "I don’t see anything notable here";
+            else
+            {
+                mensaje = "You can see " + itemNum + " items ";
+                for(int i = 0; i < itemNum; i++)
+                {
+                    mensaje = mensaje + "("  + itemName[i] + ") ";
+                }
+            }
+            return mensaje;
+        }
     }
 }

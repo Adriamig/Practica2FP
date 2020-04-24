@@ -12,12 +12,14 @@ namespace Pruebas
 
             while (!mapa.EndOfStream)
             {
-                string s = mapa.ReadLine();
-                Console.WriteLine(s);
+                string linea = mapa.ReadLine();
+                string[] corchetes = linea.Split(Convert.ToChar("\""));
+                for(int i = 0; i < corchetes.Length; i++) Console.WriteLine(corchetes[i]);
             }
 
             mapa.Close();
             Console.ReadLine();
         }
+
     }
 }
