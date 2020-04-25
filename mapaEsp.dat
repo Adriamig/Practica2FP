@@ -1,0 +1,89 @@
+// room <nombre> "<desc>"
+
+room rest_stop "Estás en la parada de descanso de las Cascadas del Norte Hwy. Es una fresca mañana de otoño. Al Norte, un cachorro ladra y corre camino abajo adentrándose en el bosque. Al Sud, tu cálido coche y la carretera abierta."
+
+room car "Comienzas a andar carretera abajo, preguntándote qué puede haber ocurrido. Un Wheeler 18 te atropella. La próxima vez, mira a ambos lados antes de entrar en el tráfico."
+
+room forest_trail "El camino da a cimas cubiertas de nieve y un valle exuberante. Al norte, un río salvaje fluye \Otros caminos llevan al Este y al Oeste. Vuelve al párking del Sud."
+
+room river_bank "El frío y cristalino lago Skagit llega a tus pies. Intenta vadear el río yendo al Norte  Dirígete corriente arriba por el Este Muévete hacia el Sonido Puget yendo corriente abajo, hacia el Oeste. Vuelve hacia el principio yendo dirección Sud."
+
+room trail_east "Un enorme pico se muestra desde arriba. Escala el pico yendo al Este. Dirígete al Norte a lo largo de Kendal Catwalk. En el Sud está la difícil Sección K del Camino de la Cresta Pacífica. Las majestuosas vistas del valle se encuentran al Oeste.
+
+room trail_west "El sendero se bifurca en un afloramiento de granito. Una escalada corta por el Oeste parece indicar la entrada a la cueva. El rastro continúa por el Norte y el Sud. Vuelve a las vistas del valle por el Este"
+
+room kendal_catwalk "Un caminito estrecho sobresale del acantilado, caerse desde aquí es muerte asegurada. Una avalancha ha bloqueado tu camino. Has de volver al Sud"
+
+room section_k "Este recorrido tan difícil parece eterno. Continúa hacia lo desconocido que se halla sobre otra empinada subida en el Sud. Ríndete y vuelve a un camino más fácil yendo por el Norte"
+
+room mountain_east "No es proeza sencilla superar a uno de estos gigantes. ¡Disfruta de las vistas! Sólo hay un camino para bajar desde aquí. Dirígete al Oeste"
+
+room clearing "Una apertura en el bosque revela una horda de alces pastando. El rastro parece desaparecer aquí. Será mejor no salirse del rastro y volver al Sud"
+
+room dense_forest "El bosque es tan denso en esta zona que provoca oscuridad. Se vuelve demasiado espeso para seguir. Parece que volver al Norte es la única opción"
+
+room cave "Es difícil estimar la profundidad de esta cueva. Está bastante oscuro. Para descender y volver a donde estabas, dirígete al Este."
+
+room raging_river "El río es más frío y profundo de lo que parecía. De corriente más rápida también. Mala idea. Estás muertx."
+
+room shallow_crossing "Es mucho más fría de lo que te pensabas. Pierdes 10 de vida. Dirígete al Este para alcanzar un puente. Ve al Oeste para volver a la orilla del río."
+
+room bridge_crossing "Espera, ¡¿acabo de cruzar un río para encontrar un puente?! ¡Oh! ¡Ahí está el cachorro que vi en la parada de descanso! Camina hacia el Norte para acercarte al perrete. Vuelve por el puente del Sud."
+
+room river_delta "El sol brilla en los humedales mientras los pájaros llenan el aire de sonido. Vuelve al Este, a no ser que tengas un barco."
+
+room stevens_pass "¡Has llegado al Paso de Steven! ¡Espero que hayas traído tu tablero! Vuelve al Norte una vez hayas deshecho tu nudo, bro"
+
+room doggo "Al fin, ¡el perro que te ha hecho adentrarte en el bosque está justo aquí! El Sud es la única dirección en la que puedes ir."
+
+
+// conections
+// conn <ori> <dir> <dest>
+
+conn rest_stop s car
+conn rest_stop n forest_trail
+
+conn forest_trail n river_bank 
+conn forest_trail e trail_east 
+conn forest_trail w trail_west 
+
+conn trail_east n kendal_catwalk 
+conn trail_east e mountain_east 
+conn trail_east s section_k 
+
+conn trail_west n clearing 
+conn trail_west w cave 
+conn trail_west s dense_forest 
+
+conn section_k s stevens_pass 
+
+conn river_bank n raging_river 
+conn river_bank e shallow_crossing 
+conn river_bank w river_delta 
+
+conn shallow_crossing e bridge_crossing 
+
+conn doggo s bridge_crossing 
+
+
+
+// item <nombre> <weight> <hp> <place> <"descr">
+item flashlight 5 0 rest_stop "Una herramienta útil para alumbrar tu camino." 
+
+item black_key 1 0 dense_forest "Una llave negra. Debe abrir algo." 
+
+item red_key 1 0 stevens_pass "Una pequeña llave roja. Debe abrir algo." 
+
+item dog_treats 2 0 river_delta "Estas chuches harán de cualquier perrete tu amiguete." 
+
+item pebbles 2 3 clearing "Pequeñas piedras redondas."
+
+item berry1 2 4 trail_west "Bayas moradas repletas de sabor."
+
+item berry2 2 5 kendal_catwalk "Bayas azules repletas de sabor."
+
+item berry3 1 3 river_delta "Bayas negras repletas de sabor."
+
+
+entry car
+exit doggo

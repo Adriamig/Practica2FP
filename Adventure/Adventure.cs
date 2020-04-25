@@ -274,6 +274,7 @@ namespace Adventure
                 {
                     m.PickItemInRoom(pos, item);
                     inventory.insertaFinal(itemName);
+                    weight = weight + m.GetItemWeight(item);
                 }
             }
             catch
@@ -325,8 +326,9 @@ namespace Adventure
         static void Main()
         {
             bool finish = false;
+            bool ganar = false;
             Map miMapa = new Map(18, 8);
-            miMapa.ReadMap("/users/adri/desktop/practica2/mapa.dat");
+            miMapa.ReadMap("/users/adri/desktop/practica2/mapaEsp.dat");
             Console.WriteLine("What's your name in this adventure?");
             string playerName = Console.ReadLine();
             Player miJugador = new Player(playerName, miMapa.GetEntryRoom());
@@ -337,9 +339,15 @@ namespace Adventure
                 Console.Write("-> ");
                 bool leido = HandleInput(Console.ReadLine(), miJugador, miMapa, ref finish);
                 if (!leido) Console.WriteLine("I didn't understund your answere, try with something else or type \"Help\" to know the controls");
-                if (ArrivedAtExit(miMapa, miJugador)) finish = true;
+                if (ArrivedAtExit(miMapa, miJugador))
+                {
+                    finish = true;
+                    ganar = true;
+                }
+                if (!miJugador.IsAlive()) finish = true;
             }
-            Console.WriteLine("Congratulations!! You reach the goal");
+            if (ganar) Console.WriteLine("Congratulations!! You reach the goal");
+            else Console.WriteLine("You lose :(");
             Console.ReadLine();
         }
 
@@ -390,6 +398,34 @@ namespace Adventure
                 default:
                     leido = false;
                     break;
+            }
+            if (!leido)
+            {
+                string[] pickEat = com.Split(' ');
+                if(pickEat[0] == "pick")
+                {
+                    try
+                    {
+                        p.PickItem(m, pickEat[1]);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Type the item you want to pick.");
+                    }
+                    leido = true;
+                }
+                else if (pickEat[0] == "eat")
+                {
+                    try
+                    {
+                        p.EatItem(m, pickEat[1]);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("You cant eat that.");
+                    }
+                    leido = true;
+                }
             }
             return leido;
         }
