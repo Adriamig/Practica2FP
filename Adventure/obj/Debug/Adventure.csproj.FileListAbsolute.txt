@@ -1,0 +1,6 @@
+C:\Users\Adri\Desktop\Practica2\Adventure\bin\Debug\Adventure.exe.config
+C:\Users\Adri\Desktop\Practica2\Adventure\bin\Debug\Adventure.exe
+C:\Users\Adri\Desktop\Practica2\Adventure\bin\Debug\Adventure.pdb
+C:\Users\Adri\Desktop\Practica2\Adventure\obj\Debug\Adventure.csprojAssemblyReference.cache
+C:\Users\Adri\Desktop\Practica2\Adventure\obj\Debug\Adventure.exe
+C:\Users\Adri\Desktop\Practica2\Adventure\obj\Debug\Adventure.pdb

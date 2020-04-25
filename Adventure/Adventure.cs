@@ -5,6 +5,7 @@ using System.IO;
 namespace Adventure
 {
     public enum Direction { North, South, East, West };
+
     class Map
     {
         // items
@@ -43,9 +44,7 @@ namespace Adventure
 
         public void ReadMap(string file)
         {
-            StreamReader mapa;
-
-            mapa = new StreamReader(file);
+            StreamReader mapa = new StreamReader(file);
 
             while (!mapa.EndOfStream)
             {
@@ -71,15 +70,14 @@ namespace Adventure
                         {
                             if (rooms[exit].name == palabra[1]) rooms[exit].exit = true;
                             else rooms[exit].exit = false;
+                            exit++;
                         }
                         break;
                     default:
                         break;
                 }
             }
-
             mapa.Close();
-
         }
 
         private void CreateItme(string item, int peso, int curar, string lugar, string descripcion)
@@ -178,20 +176,7 @@ namespace Adventure
 
         public string GetInfoItemsInRoom(int roomNumber)
         {
-            string mensaje;
-            int itemNum;
-            string[] itemName;
-            rooms[roomNumber].itemsInRoom.InfoItemsInRoom(out itemName, out itemNum);
-            if (itemNum == 0) mensaje = "I don’t see anything notable here";
-            else
-            {
-                mensaje = "You can see " + itemNum + " items ";
-                for (int i = 0; i < itemNum; i++)
-                {
-                    mensaje = mensaje + "(" + itemName[i] + ") ";
-                }
-            }
-            return mensaje;
+            return rooms[roomNumber].itemsInRoom.InfoItemsInRoom();
         }
 
         public bool PickItemInRoom(int roomNumber, int itemNumber)
@@ -217,14 +202,15 @@ namespace Adventure
 
         public string GetMovesInfo(int roomNumber)
         {
-            string mensaje = "En esta habitación estan las salidas: ";
+            string mensaje = "In this room you can choose those exits: ";
             int i = 0;
             while (i < rooms[roomNumber].connections.Length)
             {
-                if (rooms[roomNumber].connections[i] == 1)
+                if (rooms[roomNumber].connections[i] != -1)
                 {
                     mensaje = mensaje + Enum.GetName(typeof(Direction), i) + " ";
                 }
+                i++;
             }
             return mensaje;
         }
@@ -246,12 +232,10 @@ namespace Adventure
         const int HP_PER_MOVEMENT = 2;     // hp consumidos por movimiento
         const int MAX_WEIGHT = 20;         // maximo peso que puede llevar
 
-        Map mapa;
-
         public Player(string playerName, int entryRoom)
         {
             name = playerName;
-            pos = mapa.GetEntryRoom();
+            pos = entryRoom;
             inventory = new ListaEnlazada();
             weight = 0;
             hp = MAX_HP;
@@ -269,7 +253,175 @@ namespace Adventure
 
         public bool Move(Map m, Direction dir)
         {
+            int moverse = m.Move(pos, dir);
+            if (moverse == -1)
+                return false;
+            else
+            {
+                pos = moverse;
+                hp = hp - HP_PER_MOVEMENT;
+                return true;
+            }
+        }
 
+        public void PickItem(Map m, string itemName)
+        {
+            int item = m.FindItemByName(itemName);
+            try
+            {
+                int colocar = weight + m.GetItemWeight(item);
+                if(colocar <= MAX_WEIGHT)
+                {
+                    m.PickItemInRoom(pos, item);
+                    inventory.insertaFinal(itemName);
+                }
+            }
+            catch
+            {
+
+            }
+        } //Hacer excepciones
+
+        public void EatItem(Map m, string itemName)
+        {
+            int item = m.FindItemByName(itemName);
+            int heal = m.GetItemHP(item);
+            if (inventory.buscaDato(itemName) && heal > 0)
+            {
+                try
+                {
+                    hp += heal;
+                    weight -= m.GetItemWeight(item);
+                    inventory.BorrarNodo(itemName);
+                }
+                catch
+                {
+
+                }
+            }
+        } //Hacer excepciones
+
+        public string GetInventoryInfo(Map m)
+        {
+            if (inventory == null)
+                return "My bag is empty";
+            else
+            {
+                return inventory.InventoryInfo();
+            } 
+        }
+
+        public string GetPlayerInfo()
+        {
+            string mensaje;
+            mensaje = "Now you " + name + " has " + hp + " hp and your inventory has " + weight + " of "
+                + MAX_WEIGHT + " space.";
+            return mensaje;
+        }
+    }
+
+    class MainClass
+    {
+        static void Main()
+        {
+            bool finish = false;
+            Map miMapa = new Map(18, 8);
+            miMapa.ReadMap("/users/adri/desktop/practica2/mapa.dat");
+            Console.WriteLine("What's your name in this adventure?");
+            string playerName = Console.ReadLine();
+            Player miJugador = new Player(playerName, miMapa.GetEntryRoom());
+            Console.Clear();
+            Console.WriteLine(miJugador.GetPlayerInfo());
+            while (!finish)
+            {
+                Console.Write("-> ");
+                bool leido = HandleInput(Console.ReadLine(), miJugador, miMapa, ref finish);
+                if (!leido) Console.WriteLine("I didn't understund your answere, try with something else or type \"Help\" to know the controls");
+                if (ArrivedAtExit(miMapa, miJugador)) finish = true;
+            }
+            Console.WriteLine("Congratulations!! You reach the goal");
+            Console.ReadLine();
+        }
+
+        static bool HandleInput(string com, Player p, Map m, ref bool quit)
+        {
+            bool leido = true;
+            com.ToLower();
+            switch (com)
+            {
+                case "go north":
+                case "go n":
+                    if (!p.Move(m, Direction.North))
+                        Console.WriteLine("You can't choose this direction.");
+                    break;
+                case "go south":
+                case "go s":
+                    if (!p.Move(m, Direction.South))
+                        Console.WriteLine("You can't choose this direction.");
+                    break;
+                case "go east":
+                case "go e":
+                    if (!p.Move(m, Direction.East))
+                        Console.WriteLine("You can't choose this direction.");
+                    break;
+                case "go West":
+                case "go w":
+                    if (!p.Move(m, Direction.West))
+                        Console.WriteLine("You can't choose this direction.");
+                    break;
+                case "inventory":
+                    Console.WriteLine(p.GetInventoryInfo(m));
+                    break;
+                case "me":
+                    Console.WriteLine(p.GetPlayerInfo());
+                    break;
+                case "look":
+                    Console.WriteLine(m.GetInfoItemsInRoom(p.GetPosition()));
+                    break;
+                case "help":
+                    EscribirComandos();
+                    break;
+                case "info":
+                    InfoPlace(m, p.GetPosition());
+                    break;
+                case "quit":
+                    quit = true;
+                    break;
+                default:
+                    leido = false;
+                    break;
+            }
+            return leido;
+        }
+        static void InfoPlace(Map m, int roomNumber)
+        {
+            Console.WriteLine(m.GetRoomInfo(roomNumber));
+            Console.WriteLine(m.GetMovesInfo(roomNumber));
+        }
+
+        static bool ArrivedAtExit(Map m, Player thePlayer)
+        {
+            if (m.IsExit(thePlayer.GetPosition()))
+                return true;
+            else
+            {
+                return false;
+            }
+        }
+
+        static void EscribirComandos()
+        {
+            string[,] comandos = new string[2,5] { { "go <direccion>", "pick <item>", "look", "info", "inventory" },
+                                                    { "eat <item>", "me", "quit", "help", ""} } ;
+            Console.WriteLine("These are the controls:");
+            for(int i = 0; i < comandos.GetLength(0); i++)
+            {
+                for(int j = 0; j < comandos.GetLength(1); j++)
+                {
+                    Console.Write("{0, 18:0} ", comandos[i, j]);
+                }
+                Console.WriteLine();
+            }
         }
     }
 }

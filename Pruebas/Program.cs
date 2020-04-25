@@ -1,24 +1,15 @@
 ﻿using System;
 using System.IO;
+using Listas;
+
 namespace Pruebas
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            StreamReader mapa;
-
-            mapa = new StreamReader("/Users/Adri/Desktop/Practica2/mapa.dat");
-
-            while (!mapa.EndOfStream)
-            {
-                string linea = mapa.ReadLine();
-                string[] corchetes = linea.Split(Convert.ToChar("\""));
-                for(int i = 0; i < corchetes.Length; i++) Console.WriteLine(corchetes[i]);
-            }
-
-            mapa.Close();
-            Console.ReadLine();
+            StreamReader file = new StreamReader("/users/adri/desktop/practica2/mapa.dat");
+            file.Close();
         }
 
     }

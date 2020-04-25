@@ -10,7 +10,6 @@ namespace Listas
 		{
 			public string itemName;
 			public Nodo sig;
-			public Nodo anterior;
 		}
 
 		Nodo pri;
@@ -30,7 +29,7 @@ namespace Listas
 				pri.sig = null;
 			}
 			else
-			{ 
+			{
 				Nodo aux = pri;   // recorremos la lista hasta el ultimo nodo
 				while (aux.sig != null)
 				{
@@ -39,8 +38,8 @@ namespace Listas
 				// aux apunta al último nodo
 				aux.sig = new Nodo(); // creamos el nuevo a continuación
 				aux = aux.sig;         // avanzamos aux al nuevo nodo
-				pri.itemName = name;
-				aux.sig = null;        // siguiente a null 
+				aux.itemName = name;
+				aux.sig = null;        // siguiente a null
 			}
 		}
 
@@ -69,22 +68,7 @@ namespace Listas
 		public string InfoItemsInRoom()
 		{
 			int itemsNum = 0;
-			string mensaje = "In this room you can find: ";
-			Nodo aux = pri; // referencia al primero
-			while (aux != null)
-			{  // búsqueda de nodo con elto e
-				itemsNum++;
-				mensaje = mensaje + aux.itemName + " ";
-				aux = aux.sig;
-			}
-			mensaje = mensaje + "(" + itemsNum + " items)";
-			return mensaje;
-		}
-
-		public string InventoryInfo()
-		{
-			int itemsNum = 0;
-			string mensaje = "In your inventary you have: ";
+			string mensaje = "En esta sala se encuentrar los items: ";
 			Nodo aux = pri; // referencia al primero
 			while (aux != null)
 			{  // búsqueda de nodo con elto e
@@ -113,6 +97,19 @@ namespace Listas
 				} while (aux.itemName != itemName);
 				anterior.sig = aux.sig;
 			}
+		}
+
+		public void ver()
+		{
+			Console.Write("\nLista: ");
+			Nodo aux = pri;
+			while (aux != null)
+			{
+				Console.Write(aux.itemName + " ");
+				aux = aux.sig;
+			}
+			Console.WriteLine();
+			Console.WriteLine();
 		}
 	}
 }

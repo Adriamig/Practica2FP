@@ -65,7 +65,8 @@ namespace Listas{
 		public void ver(){
 			Console.Write("\nLista: ");
 			Nodo aux = pri;
-			while (aux!=null) {
+			while (aux!=null)
+			{
 				Console.Write (aux.dato + " ");
 				aux = aux.sig;
 			}
