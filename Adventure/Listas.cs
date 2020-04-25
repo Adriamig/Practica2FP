@@ -56,7 +56,7 @@ namespace Listas
 		private Nodo buscaNodo(string name)
 		{
 			Nodo aux = pri; // referencia al primero
-			while (aux != null && aux.itemName == name)
+			while (aux != null && aux.itemName != name)
 			{  // búsqueda de nodo con elto e
 				aux = aux.sig;
 			}
@@ -83,6 +83,35 @@ namespace Listas
 			{  // búsqueda de nodo con elto e
 				itemName[itemsNum] = aux.itemName;
 				aux = aux.sig;
+			}
+		}
+
+		public void BorrarNodo(string itemName)
+		{
+			Nodo aux = buscaNodo(itemName);
+			if(aux != null)
+			{
+				if(pri == aux)
+				{
+					do
+					{
+						pri = pri.sig;
+					} while (pri.sig != null);
+				}
+				else if (pri.sig == aux)
+				{
+					do
+					{
+						pri.sig = pri.sig.sig;
+					} while (pri.sig.sig != null);
+				}
+				else if (pri.sig.sig == aux)
+				{
+					do
+					{
+						pri.sig.sig = pri.sig.sig.sig;
+					} while (pri.sig.sig.sig != null);
+				}
 			}
 		}
 	}
