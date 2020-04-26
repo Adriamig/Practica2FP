@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Adrián Migueles D'Ambrosio
+// Simeón Petrov Konstantinov
+
+using System;
 using Listas;
 using System.IO;
 
@@ -44,40 +47,47 @@ namespace Adventure
 
         public void ReadMap(string file)
         {
-            StreamReader mapa = new StreamReader(file);
-
-            while (!mapa.EndOfStream)
+            try
             {
-                string linea = mapa.ReadLine();
-                string[] palabra = linea.Split(Convert.ToChar(" "));
-                switch (palabra[0])
+                StreamReader mapa = new StreamReader(file);
+                while (!mapa.EndOfStream)
                 {
-                    case "room":
-                        CreateRoom(palabra[1], ReadDescription(linea));
-                        break;
-                    case "item":
-                        CreateItme(palabra[1], int.Parse(palabra[2]), int.Parse(palabra[3]), palabra[4], ReadDescription(linea));
-                        break;
-                    case "conn":
-                        GetConection(palabra[1], palabra[2], palabra[3]);
-                        break;
-                    case "entry":
-                        entryRoom = FindRoomByName(palabra[1]);
-                        break;
-                    case "exit":
-                        int exit = 0;
-                        while (exit < rooms.Length)
-                        {
-                            if (rooms[exit].name == palabra[1]) rooms[exit].exit = true;
-                            else rooms[exit].exit = false;
-                            exit++;
-                        }
-                        break;
-                    default:
-                        break;
+                    string linea = mapa.ReadLine();
+                    string[] palabra = linea.Split(Convert.ToChar(" "));
+                    switch (palabra[0])
+                    {
+                        case "room":
+                            CreateRoom(palabra[1], ReadDescription(linea));
+                            break;
+                        case "item":
+                            CreateItme(palabra[1], int.Parse(palabra[2]), int.Parse(palabra[3]), palabra[4], ReadDescription(linea));
+                            break;
+                        case "conn":
+                            GetConection(palabra[1], palabra[2], palabra[3]);
+                            break;
+                        case "entry":
+                            entryRoom = FindRoomByName(palabra[1]);
+                            break;
+                        case "exit":
+                            int exit = 0;
+                            while (exit < rooms.Length)
+                            {
+                                if (rooms[exit].name == palabra[1]) rooms[exit].exit = true;
+                                else rooms[exit].exit = false;
+                                exit++;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
+                mapa.Close();
             }
-            mapa.Close();
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+                      
         }
 
         private void CreateItme(string item, int peso, int curar, string lugar, string descripcion)
@@ -229,7 +239,7 @@ namespace Adventure
         int weight;                // peso de los objetos que tiene
         ListaEnlazada inventory;           // lista de objetos que lleva
         const int MAX_HP = 10;             // maximo health points
-        const int HP_PER_MOVEMENT = 2;     // hp consumidos por movimiento
+        const int HP_PER_MOVEMENT = 1;     // hp consumidos por movimiento
         const int MAX_WEIGHT = 20;         // maximo peso que puede llevar
 
         public Player(string playerName, int entryRoom)
@@ -266,45 +276,90 @@ namespace Adventure
 
         public void PickItem(Map m, string itemName)
         {
-            int item = m.FindItemByName(itemName);
-            try
+            if (m.GetInfoItemsInRoom(pos) != "In this room you can find: (0 items)")
             {
-                int colocar = weight + m.GetItemWeight(item);
-                if(colocar <= MAX_WEIGHT)
+                try
                 {
-                    m.PickItemInRoom(pos, item);
-                    inventory.insertaFinal(itemName);
-                    weight = weight + m.GetItemWeight(item);
+                    itemName = itemName.Split(' ')[1];
+                    try
+                    {
+                        int item = m.FindItemByName(itemName);
+                        int colocar = weight + m.GetItemWeight(item);
+                        if (colocar <= MAX_WEIGHT)
+                        {
+                            if(m.PickItemInRoom(pos, item))
+                            { 
+                                inventory.insertaFinal(itemName);
+                                weight += m.GetItemWeight(item);
+                            }
+                            else
+                            {
+                                Console.WriteLine("That item doesn't exist in this room.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Your bag is full.");
+                        }
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Type the item you want to pick correctly, that item doesn't exist.");
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Write the item that you want to pick with a spacebar(\" \")");
                 }
             }
-            catch
+            else
             {
-
+                Console.WriteLine("There are no items in this room.");
             }
+
         } //Hacer excepciones
 
         public void EatItem(Map m, string itemName)
         {
-            int item = m.FindItemByName(itemName);
-            int heal = m.GetItemHP(item);
-            if (inventory.buscaDato(itemName) && heal > 0)
+            if(GetInventoryInfo(m) != "My bag is empty")
             {
                 try
                 {
-                    hp += heal;
-                    weight -= m.GetItemWeight(item);
-                    inventory.BorrarNodo(itemName);
+                    itemName = itemName.Split(' ')[1];
+                    try
+                    {
+                        int item = m.FindItemByName(itemName);
+                        int heal = m.GetItemHP(item);
+                        if (inventory.buscaDato(itemName) && heal > 0)
+                        {
+                            hp += heal;
+                            weight -= m.GetItemWeight(item);
+                            inventory.BorrarNodo(itemName);
+                        }
+                        else
+                        {
+                            Console.WriteLine("You can't eat that item.");
+                        }
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Type the item you want to eat correctly, that item doesn't exist.");
+                    }
                 }
                 catch
                 {
-
+                    Console.WriteLine("Write the item that you want to eat with a spacebar(\" \")");
                 }
+            }
+            else
+            {
+                Console.WriteLine("There are no itmes in your bag.");
             }
         } //Hacer excepciones
 
         public string GetInventoryInfo(Map m)
         {
-            if (inventory == null)
+            if (inventory.InventoryInfo() == "In your inventary you have: (0 items)")
                 return "My bag is empty";
             else
             {
@@ -328,7 +383,7 @@ namespace Adventure
             bool finish = false;
             bool ganar = false;
             Map miMapa = new Map(18, 8);
-            miMapa.ReadMap("/users/adri/desktop/practica2/mapaEsp.dat");
+            miMapa.ReadMap("/users/adri/desktop/practica2/mapaEsp");
             Console.WriteLine("What's your name in this adventure?");
             string playerName = Console.ReadLine();
             Player miJugador = new Player(playerName, miMapa.GetEntryRoom());
@@ -337,7 +392,7 @@ namespace Adventure
             while (!finish)
             {
                 Console.Write("-> ");
-                bool leido = HandleInput(Console.ReadLine(), miJugador, miMapa, ref finish);
+                bool leido = HandleInput(Console.ReadLine(), miJugador, miMapa, out finish);
                 if (!leido) Console.WriteLine("I didn't understund your answere, try with something else or type \"Help\" to know the controls");
                 if (ArrivedAtExit(miMapa, miJugador))
                 {
@@ -351,10 +406,11 @@ namespace Adventure
             Console.ReadLine();
         }
 
-        static bool HandleInput(string com, Player p, Map m, ref bool quit)
+        static bool HandleInput(string com, Player p, Map m, out bool quit)
         {
             bool leido = true;
-            com.ToLower();
+            quit = false;
+            com = com.ToLower();
             switch (com)
             {
                 case "go north":
@@ -395,6 +451,9 @@ namespace Adventure
                 case "quit":
                     quit = true;
                     break;
+                case "clear":
+                    Console.Clear();
+                    break;
                 default:
                     leido = false;
                     break;
@@ -404,26 +463,13 @@ namespace Adventure
                 string[] pickEat = com.Split(' ');
                 if(pickEat[0] == "pick")
                 {
-                    try
-                    {
-                        p.PickItem(m, pickEat[1]);
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Type the item you want to pick.");
-                    }
+                    p.PickItem(m, com);
+                    
                     leido = true;
                 }
                 else if (pickEat[0] == "eat")
                 {
-                    try
-                    {
-                        p.EatItem(m, pickEat[1]);
-                    }
-                    catch
-                    {
-                        Console.WriteLine("You cant eat that.");
-                    }
+                    p.EatItem(m, com);
                     leido = true;
                 }
             }
@@ -448,7 +494,7 @@ namespace Adventure
         static void EscribirComandos()
         {
             string[,] comandos = new string[2,5] { { "go <direccion>", "pick <item>", "look", "info", "inventory" },
-                                                    { "eat <item>", "me", "quit", "help", ""} } ;
+                                                    { "eat <item>", "me", "quit", "help", "clear"} } ;
             Console.WriteLine("These are the controls:");
             for(int i = 0; i < comandos.GetLength(0); i++)
             {

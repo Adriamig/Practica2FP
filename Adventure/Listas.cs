@@ -10,7 +10,6 @@ namespace Listas
 		{
 			public string itemName;
 			public Nodo sig;
-			public Nodo anterior;
 		}
 
 		Nodo pri;
@@ -39,7 +38,7 @@ namespace Listas
 				// aux apunta al último nodo
 				aux.sig = new Nodo(); // creamos el nuevo a continuación
 				aux = aux.sig;         // avanzamos aux al nuevo nodo
-				pri.itemName = name;
+				aux.itemName = name;
 				aux.sig = null;        // siguiente a null 
 			}
 		}
