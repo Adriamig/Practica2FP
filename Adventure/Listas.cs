@@ -65,25 +65,10 @@ namespace Listas
 			return aux;
 		}
 
-		public string InfoItemsInRoom()
+		public string ItemsInRoomInventory()
 		{
 			int itemsNum = 0;
-			string mensaje = "In this room you can find: ";
-			Nodo aux = pri; // referencia al primero
-			while (aux != null)
-			{  // búsqueda de nodo con elto e
-				itemsNum++;
-				mensaje = mensaje + aux.itemName + " ";
-				aux = aux.sig;
-			}
-			mensaje = mensaje + "(" + itemsNum + " items)";
-			return mensaje;
-		}
-
-		public string InventoryInfo()
-		{
-			int itemsNum = 0;
-			string mensaje = "In your inventary you have: ";
+			string mensaje = "";
 			Nodo aux = pri; // referencia al primero
 			while (aux != null)
 			{  // búsqueda de nodo con elto e
