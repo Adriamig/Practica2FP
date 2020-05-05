@@ -82,8 +82,9 @@ namespace Adventure
                     }
                 }
                 mapa.Close();
+                throw new Exception("This file doesn't exist, please put a correct direction for the Map.");
             }
-            catch (FileNotFoundException e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
@@ -301,15 +302,17 @@ namespace Adventure
                         {
                             Console.WriteLine("Your bag is full.");
                         }
+                        throw new Exception("Type the item you want to pick correctly, that item doesn't exist.");
                     }
-                    catch
+                    catch(Exception e)
                     {
-                        Console.WriteLine("Type the item you want to pick correctly, that item doesn't exist.");
+                        Console.WriteLine(e.Message);
                     }
+                    throw new Exception("Write the item that you want to pick with a spacebar(\" \")");
                 }
-                catch
+                catch(Exception e)
                 {
-                    Console.WriteLine("Write the item that you want to pick with a spacebar(\" \")");
+                    Console.WriteLine(e.Message);
                 }
             }
             else
@@ -340,22 +343,24 @@ namespace Adventure
                         {
                             Console.WriteLine("You can't eat that item.");
                         }
+                        throw new Exception("Type the item you want to eat correctly, that item doesn't exist.");
                     }
-                    catch
+                    catch(Exception e)
                     {
-                        Console.WriteLine("Type the item you want to eat correctly, that item doesn't exist.");
+                        Console.WriteLine(e.Message);
                     }
+                    throw new Exception("Write the item that you want to eat with a spacebar(\" \")");
                 }
-                catch
+                catch(Exception e)
                 {
-                    Console.WriteLine("Write the item that you want to eat with a spacebar(\" \")");
+                    Console.WriteLine(e.Message);
                 }
             }
             else
             {
                 Console.WriteLine("There are no itmes in your bag.");
             }
-        } //Hacer excepciones
+        }
 
         public string GetInventoryInfo(Map m)
         {
