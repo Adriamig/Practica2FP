@@ -336,6 +336,12 @@ namespace Adventure
             // Devuelve el numero del array que hay en esa dirección
             return rooms[roomNumber].connections[(int)dir];
         }
+
+        // Metodo que añade un item a una sala
+        public void dropItemInRoom(int roomNumber, string itemName)
+        {
+            rooms[roomNumber].itemsInRoom.insertaFinal(itemName);
+        }
     }
 
     class Player
@@ -521,7 +527,7 @@ namespace Adventure
             else
             {
                 // Salta una nueva excepción
-                throw new Exception("There are no itmes in your bag.");
+                throw new Exception("Your bag is empty.");
             }
         }
 
@@ -550,6 +556,59 @@ namespace Adventure
             // Devuelve un mensaje con la informacion del jugador
             return mensaje;
         }
+
+        public void dropItem(Map m, string itemName)
+        {
+            // Si este inventario tiene items
+            if (GetInventoryInfo(m) != "My bag is empty")
+            {
+                // Intenta coger del array la segunda palabra donde se encuentra el item
+                try
+                {
+                    itemName = itemName.Split(' ')[1];
+                }
+                // En el caso de que no haya puesto item salta la excepción
+                catch
+                {
+                    // Salta una nueva excepción
+                    throw new Exception("Write the item that you want to pick with a spacebar(\" \")");
+                }
+                int item = m.FindItemByName(itemName);
+                // Si el item existe
+                if (item != -1)
+                {
+                    // Si hay item
+                    if (inventory.buscaDato(itemName))
+                    {
+                        // Añadimos el item en la sala que nos encontramos
+                        m.dropItemInRoom(pos, itemName);
+                        // Borramos del inventario el item y el peso de este
+                        inventory.BorrarNodo(itemName);
+                        weight -= m.GetItemWeight(item);
+
+                    }
+                    // Si no hay item
+                    else
+                    {
+                        // Salta una nueva excepción
+                        throw new Exception("That item is not in your inventory.");
+                    }
+                }
+                // En el caso de que no exista
+                else
+                {
+                    // Salta una nueva excepción
+                    throw new Exception("Type the item you want to pick correctly, that item doesn't exist.");
+                }
+
+            }
+            // En el caso de que no hayan items
+            else
+            {
+                // Salta una nueva excepción
+                throw new Exception("Your bag is empty.");
+            }
+        }
     }
 
     class MainClass
@@ -564,7 +623,7 @@ namespace Adventure
             // Intentamos leer el archivo
             try
             {
-                miMapa.ReadMap("/users/joanm/desktop/adri/practica2fp/mapaEsp.dat");
+                miMapa.ReadMap("/users/adri/desktop/practica2/mapaEsp.dat");
                 
             }
             // En el caso de que de algun error
@@ -755,6 +814,28 @@ namespace Adventure
                     // Ponemos que se ha leido ya que se ha entrado en el comando
                     leido = true;
                 }
+                // En el caso de drop
+                else if (pickEat[0] == "drop")
+                {
+                    // Intenta ejecutar el metodo
+                    try
+                    {
+                        // Envio com, en vez de pickEat[1], para que salte el error dentro del 
+                        // metodo en el caso de que solo haya escrito "drop" sin nada detras
+                        p.dropItem(m, com);
+                        Console.Write("You drop the item " + pickEat[1] + ". ");
+                        Console.WriteLine(m.PrintItemInfo(m.FindItemByName(pickEat[1])));
+                    }
+                    // En el caso de que salte un error lo escribe en pantalla
+                    catch (Exception e)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine(e.Message);
+                        Console.ResetColor();
+                    }
+                    // Ponemos que se ha leido ya que se ha entrado en el comando
+                    leido = true;
+                }
             }
             // Devuelverue si se ha leido un comando false en el caso de que no se haya leido nada
             return leido;
@@ -778,8 +859,9 @@ namespace Adventure
         static void EscribirComandos()
         {
             // Creamos un array de string de como queremos que sea la tabla
-            string[,] comandos = new string[2, 5] { { "go <direccion>", "pick <item>", "look", "info", "inventory" },
-                                                    { "eat <item>", "me", "quit", "help", "clear"} };
+            string[,] comandos = new string[3, 4] { { "go <direccion>", "pick <item>", "look", "info"},
+                                                    { "eat <item>", "me", "quit", "help"},
+                                                    { "drop <item>", "inventory", "clear", ""} };
             // Escribe los controles que hay en la tabla
             Console.WriteLine("These are the controls:");
             for (int i = 0; i < comandos.GetLength(0); i++)

@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{96DFDDC6-FF44-4E1A-8B4E-63D494242293}</ProjectGuid>
+    <ProjectGuid>{E553F66C-15B9-483E-A912-C92120147F02}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Practica2</RootNamespace>
-    <AssemblyName>Practica2</AssemblyName>
+    <RootNamespace>Adventure</RootNamespace>
+    <AssemblyName>Adventure</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Listas.cs" />
+    <Compile Include="Adventure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
